@@ -1,13 +1,14 @@
-Tired of losing your hard-earned tModLoader achievements when switching back to Steam Terraria? This mod seamlessly imports your tModLoader achievements into your Steam Terraria profile, allowing you to continue your progress without missing a single milestone.
+Steam Achievement Fix is a small but powerful mod that re-implements vanilla steam achievements in tModLoader.
+
+What this means is that when you get an ingame achievement in a modded world, the achievement will carry over to vanilla Terraria on Steam - so you get the credit you deserve!
+
+Version 1.4: Thanks entirely to K0bus, the mod should now keep track of achievement progress properly.
 
 Features:
-Automatically imports all compatible tModLoader achievements on world spawn.
-Maintains your progress across Steam Terraria and tModLoader.
-Simple installation and easy to use.
-Lightweight and efficient, with no performance impact.
+- Automatically grants all completed achievements in tModLoader to Terraria when loading a world, or on recieving the achievement.
+- Maintains your progress across both Terraria on Steam and tModLoader ingame.
+- Adds a command that refreshes achievement progress, in case they don't register (/pushallachievements).
 
-Note:
-Only compatible with the latest version of Terraria and tModLoader.
-Backup your save files before use to ensure your progress remains safe.
-Take your Terraria experience to the next level by bringing all your tModLoader achievements into Steam Terraria!
-Be patient, Terraria achievements will be loaded once you close the game.
+Notes:
+- Recommend backing up your save files before use to ensure your progress remains safe.
+- Be patient, Terraria achievements will be loaded on Steam once you close the game.
