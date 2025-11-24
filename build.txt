@@ -1,3 +1,3 @@
-displayName = Steam Fixer
+displayName = Steam Fixer (Achievements)
 author = K0bus
 version = 1.0.1
