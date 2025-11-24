@@ -1,25 +1,28 @@
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Steamworks;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Social;
 
-namespace SteamFixer
+namespace FixedAchievements
 {
     public class PushAllAchievementsCommand : ModCommand
     {
-        // Type de commande : chat
         public override CommandType Type => CommandType.Chat;
-        // Nom de la commande
+
         public override string Command => "pushallachievements";
-        // Description
-        public override string Description => "Pousse tous les achievements Terraria complétés vers Steam.";
+
+        public override string Description => Language.GetTextValue("Mods.SteamFixer.AchievementCommandDescription");
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
             if (SocialAPI.Mode != SocialMode.Steam)
             {
-                caller.Reply("[SteamFixer] Steam non actif ou indisponible.", Microsoft.Xna.Framework.Color.Red);
+                string errorReply = Language.GetTextValue("Mods.SteamFixer.SteamInactive");
+
+                caller.Reply($"[SteamFixer] {errorReply}", Color.Red);
                 return;
             }
             
@@ -33,8 +36,9 @@ namespace SteamFixer
                     try
                     {
                         // Pousser vers Steam
-                        SteamFixer.GetInstance().GrantAchievement(achievement.Name);
-                        SteamFixer.GetInstance().TryStoreStats();
+                        FixedAchievements.Instance.GrantAchievement(achievement.Name);
+                        FixedAchievements.Instance.TryStoreStats();
+
                         pushed++;
                     }
                     catch
@@ -45,7 +49,9 @@ namespace SteamFixer
                 }
             }
 
-            caller.Reply($"[SteamFixer] " + pushed + " Steam Achievement refreshed !", Microsoft.Xna.Framework.Color.Green);
+            string successReply = Language.GetTextValue("Mods.SteamFixer.AchievementsPushed", pushed);
+
+            caller.Reply($"[SteamFixer] {successReply}", Color.Green);
         }
     }
 }

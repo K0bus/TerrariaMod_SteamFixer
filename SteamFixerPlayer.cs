@@ -1,21 +1,26 @@
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Steamworks;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Social;
 
-namespace SteamFixer
+namespace FixedAchievements
 {
     public class SteamFixerPlayer : ModPlayer
     {
         public override void OnEnterWorld()
         {
-            var count = 0;
             if (SocialAPI.Mode != SocialMode.Steam)
             {
-                Main.NewText("[SteamFixer] Steam non actif ou indisponible.", Microsoft.Xna.Framework.Color.Red);
+                string errorReply = Language.GetTextValue("Mods.SteamFixer.SteamInactive");
+
+                Main.NewText($"[SteamFixer] {errorReply}", Color.Red);
                 return;
             }
+
+            int pushed = 0;
 
             foreach (var achievement in Main.Achievements.CreateAchievementsList())
             {
@@ -23,10 +28,10 @@ namespace SteamFixer
                 {
                     try
                     {
-                        SteamFixer.sendCmdDelegate?.Invoke("grant:" + achievement.Name);
-                        SteamFixer.GetInstance().GrantAchievement(achievement.Name);
-                        SteamFixer.GetInstance().TryStoreStats();
-                        count++;
+                        FixedAchievements.SendCmdDelegate?.Invoke("grant:" + achievement.Name);
+                        FixedAchievements.Instance.GrantAchievement(achievement.Name);
+                        FixedAchievements.Instance.TryStoreStats();
+                        pushed++;
                     }
                     catch
                     {
@@ -34,7 +39,10 @@ namespace SteamFixer
                     }
                 }
             }
-            Main.NewText("[SteamFixer] " + count + " achievement(s) loaded on Steam.", Microsoft.Xna.Framework.Color.Green);
+
+            string successReply = Language.GetTextValue("Mods.SteamFixer.AchievementsPushed", pushed);
+
+            Main.NewText($"[SteamFixer] {successReply}", Color.Green);
         }
     }
 }
