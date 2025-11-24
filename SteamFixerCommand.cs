@@ -47,16 +47,7 @@ namespace SteamFixer
                 }
             }
 
-            foreach (var a in Main.Achievements.CreateAchievementsList())
-            {
-                bool achieved = false;
-                if (SteamUserStats.GetAchievement(a.Name, out achieved))
-                {
-                    Mod.Logger.Info($"{a.Name} -> {(achieved ? "COMPLETED" : "NOT COMPLETED")}");
-                }
-            }
-
-            caller.Reply($"[SteamFixer] Steam Achievement refreshed !", Microsoft.Xna.Framework.Color.Green);
+            caller.Reply($"[SteamFixer] " + pushed + " Steam Achievement refreshed !", Microsoft.Xna.Framework.Color.Green);
         }
     }
 }
