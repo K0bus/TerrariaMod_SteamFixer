@@ -1,0 +1,13 @@
+Tired of losing your hard-earned tModLoader achievements when switching back to Steam Terraria? This mod seamlessly imports your tModLoader achievements into your Steam Terraria profile, allowing you to continue your progress without missing a single milestone.
+
+Features:
+Automatically imports all compatible tModLoader achievements on world spawn.
+Maintains your progress across Steam Terraria and tModLoader.
+Simple installation and easy to use.
+Lightweight and efficient, with no performance impact.
+
+Note:
+Only compatible with the latest version of Terraria and tModLoader.
+Backup your save files before use to ensure your progress remains safe.
+Take your Terraria experience to the next level by bringing all your tModLoader achievements into Steam Terraria!
+Be patient, Terraria achievements will be loaded once you close the game.

@@ -1,0 +1,3 @@
+displayName = Steam Fixer
+author = K0bus
+version = 1.0
