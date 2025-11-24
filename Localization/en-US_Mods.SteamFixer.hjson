@@ -1,1 +1,3 @@
-
+SteamInactive: Steam is inactive or unavailable.
+AchievementCommandDescription: Updates steam with all currently completed achievements.
+AchievementsPushed: "{0} achievements refreshed!"

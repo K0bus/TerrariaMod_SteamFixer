@@ -9,170 +9,170 @@ using Terraria.Achievements;
 using Terraria.ModLoader;
 using Terraria.Social;
 
-namespace SteamFixer
+namespace FixedAchievements;
+
+public class FixedAchievements : Mod
 {
-    public class SteamFixer : Mod
+    public static FixedAchievements Instance { get; private set; }
+
+    public static Action<string> SendCmdDelegate;
+
+    private readonly HashSet<string> granted = [];
+
+    public override void Load()
     {
-        public static Action<string> sendCmdDelegate;
-        private Hook onSetAchievement;
-        private HashSet<string> granted = new();
-		private static SteamFixer instance;
+        Instance = this;
 
-        public override void Load()
+        try
         {
-			instance = this;
-            granted = new();
-
-            try
-            {
-                InitializeCMD();
-                InitializeSocialAPI();
-                RegisterAchievementHook();
-                TryStoreStats();
-            }
-            catch (Exception ex)
-            {
-                // Défense en profondeur : ne pas planter le chargement du mod si qqchose casse
-                Logger.Error($"SteamFixer Load() error: {ex}");
-            }
+            InitializeCMD();
+            InitializeSocialAPI();
+            RegisterAchievementHook();
+            TryStoreStats();
         }
+        catch (Exception e)
+        {
+            // Défense en profondeur : ne pas planter le chargement du mod si qqchose casse
+            Logger.Error($"[SteamFixer] Load() error: {e}");
+        }
+    }
 
-        private void AchievementCompletedHandler(Terraria.Achievements.Achievement achievement)
+    private void AchievementCompletedHandler(Achievement achievement)
+    {
+        try
+        {
+            GrantAchievement(achievement.Name);   
+            TryStoreStats();
+        }
+        catch (Exception e)
+        {
+            Logger.Warn($"[SteamFixer] AchievementCompletedHandler Exception: {e}");
+        }
+    }
+
+    public override void Unload()
+    {
+        try
+        {
+            // Déhook proprement
+            if (Main.Achievements != null)
+            {
+                Main.Achievements.OnAchievementCompleted -= AchievementCompletedHandler;
+            }
+
+            SendCmdDelegate = null;
+        }
+        catch (Exception e)
+        {
+            Logger.Warn($"[SteamFixer] Unload() Exception: {e}");
+        }
+    }
+
+	public void GrantAchievement(string name)
+	{
+		if(SendCmdDelegate != null && !granted.Contains(name))
         {
             try
             {
-                GrantAchievement(achievement.Name);   
-                TryStoreStats();
+                SendCmdDelegate.Invoke("grant:" + name);
+                granted.Add(name);
             }
             catch (Exception e)
             {
-                Logger.Warn($"SteamFixer: AchievementCompletedHandler exception: {e}");
+                Logger.Warn($"[SteamFixer] SendCmdDelegate failed for {name}: {e}");
             }
         }
+	}
 
-        public override void Unload()
+    public void TryStoreStats()
+    {
+        try { SteamUserStats.StoreStats(); }
+        catch (Exception e) { Logger.Warn($"[SteamFixer] StoreStats failed: {e}"); }
+    }
+
+    private void InitializeCMD()
+    {
+        Assembly assembly = typeof(Main).Assembly;
+
+        string[] candidateTypes =
         {
-            try
-            {
-                // Déhook proprement
-                if (Main.Achievements != null)
+            "Terraria.ModLoader.Engine.TerrariaSteamClient",
+            "Terraria.ModLoader.Engine.Steam.TerrariaSteamClient",
+            "Terraria.TerrariaSteamClient",
+            "Terraria.ModLoader.TerrariaSteamClient"
+        };
+
+        MethodInfo sendCmdMethod = null;
+
+        foreach (string tname in candidateTypes)
+        {
+            Type type = assembly.GetType(tname);
+
+            if (type == null) continue;
+
+            // Cherche une méthode SendCmd qui prend un string (private static)
+            sendCmdMethod = type.GetMethod("SendCmd", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public, null, [typeof(string)], null);
+
+            if (sendCmdMethod != null) break;
+        }
+
+        if (sendCmdMethod == null)
+        {
+            // Fallback : chercher par nom méthode n'importe où
+            sendCmdMethod = assembly.GetTypes()
+                .SelectMany(type =>
                 {
-                    Main.Achievements.OnAchievementCompleted -= AchievementCompletedHandler;
-                }
-
-                sendCmdDelegate = null;
-            }
-            catch (Exception e)
-            {
-                Logger.Warn($"SteamFixer Unload() error: {e}");
-            }
+                    try { return type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public); }
+                    catch { return []; }
+                })
+                .FirstOrDefault(method => 
+                method.Name == "SendCmd" && 
+                method.GetParameters().Length == 1 && 
+                method.GetParameters()[0].ParameterType == typeof(string));
         }
 
-		public void GrantAchievement(string name)
-		{
-			if(!granted.Contains(name))
-				if (sendCmdDelegate != null)
-					{
-						try
-						{
-							sendCmdDelegate.Invoke("grant:" + name);
-							granted.Add(name);
-						}
-						catch (Exception e)
-						{
-							Logger.Warn($"SteamFixer: sendCmdDelegate failed for {name}: {e}");
-						}
-					}
-		}
-
-        public void TryStoreStats()
+        if (sendCmdMethod == null)
         {
-            try { SteamUserStats.StoreStats(); }
-            catch (Exception e) { Logger.Warn($"SteamFixer: StoreStats failed: {e}"); }
+            Logger.Warn("[SteamFixer] SendCmd method not found via reflection. Steam grant path disabled.");
         }
-
-        private void InitializeCMD()
+        else
         {
-            Assembly terrAsm = typeof(Main).Assembly;
+            SendCmdDelegate = (Action<string>)Delegate.CreateDelegate(typeof(Action<string>), sendCmdMethod);
+        }
+    }
 
-            string[] candidateTypes =
+    private void InitializeSocialAPI()
+    {
+        try
+        {
+            if (SocialAPI.Mode == SocialMode.Steam)
             {
-                "Terraria.ModLoader.Engine.TerrariaSteamClient",
-                "Terraria.ModLoader.Engine.Steam.TerrariaSteamClient",
-                "Terraria.TerrariaSteamClient",
-                "Terraria.ModLoader.TerrariaSteamClient"
-            };
-
-            MethodInfo sendCmdMethod = null;
-            foreach (string tname in candidateTypes)
-            {
-                Type t = terrAsm.GetType(tname);
-                if (t == null) continue;
-                // Cherche une méthode SendCmd qui prend un string (private static)
-                sendCmdMethod = t.GetMethod("SendCmd", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public, null, new Type[] { typeof(string) }, null);
-                if (sendCmdMethod != null) break;
+                // Initialize without forcing a mode (if already initialised this is safe)
+                SocialAPI.Initialize();
             }
+        }
+        catch (Exception e)
+        {
+            Logger.Warn($"[SteamFixer] SocialAPI.Initialize threw: {e}");
+        }
+    }
 
-            if (sendCmdMethod == null)
+    private void RegisterAchievementHook()
+    {
+        try
+        {
+            if (Main.Achievements != null)
             {
-                // Fallback : chercher par nom méthode n'importe où
-                sendCmdMethod = terrAsm.GetTypes()
-                    .SelectMany(ty =>
-                    {
-                        try { return ty.GetMethods(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public); }
-                        catch { return Array.Empty<MethodInfo>(); }
-                    })
-                    .FirstOrDefault(mi => mi.Name == "SendCmd" && mi.GetParameters().Length == 1 && mi.GetParameters()[0].ParameterType == typeof(string));
-            }
-
-            if (sendCmdMethod == null)
-            {
-                Logger.Warn("SteamFixer: SendCmd method not found via reflection. Steam grant path disabled.");
+                Main.Achievements.OnAchievementCompleted += AchievementCompletedHandler;
             }
             else
             {
-                sendCmdDelegate = (Action<string>)Delegate.CreateDelegate(typeof(Action<string>), sendCmdMethod);
+                Logger.Warn("SteamFixer: Main.Achievements is null — cannot hook achievements");
             }
         }
-
-        private void InitializeSocialAPI()
+        catch (Exception e)
         {
-            try
-            {
-                if (SocialAPI.Mode == SocialMode.Steam)
-                {
-                    // Initialize without forcing a mode (if already initialised this est safe)
-                    SocialAPI.Initialize();
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Warn($"SteamFixer: SocialAPI.Initialize threw: {e}");
-            }
+            Logger.Warn($"SteamFixer: failed to hook OnAchievementCompleted: {e}");
         }
-
-		private void RegisterAchievementHook()
-		{
-			try
-                {
-                    if (Main.Achievements != null)
-                    {
-                        Main.Achievements.OnAchievementCompleted += AchievementCompletedHandler;
-                    }
-                    else
-                    {
-                        Logger.Warn("SteamFixer: Main.Achievements is null — cannot hook achievements");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.Warn($"SteamFixer: failed to hook OnAchievementCompleted: {e}");
-                }
-		}
-
-		public static SteamFixer GetInstance()
-		{
-			return instance;
-		}
     }
 }
