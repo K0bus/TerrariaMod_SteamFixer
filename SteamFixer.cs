@@ -113,27 +113,6 @@ namespace SteamFixer
 				{
 					Logger.Warn($"SteamFixer: failed to hook OnAchievementCompleted: {e}");
 				}
-
-				// 5) Parcours des achievements actuels : si achevés, grant à Steam (re-synchronisation)
-				try
-				{
-					foreach (Achievement a in Main.Achievements.CreateAchievementsList())
-					{
-						if (a.IsCompleted)
-						{
-							if(!granted.Contains(a.Name))
-							{
-								granted.Add(a.Name);
-								sendCmdDelegate?.Invoke("grant:" + a.Name);
-							}
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					Logger.Warn($"SteamFixer: error enumerating achievements: {e}");
-				}
-
 				// 6) Hook SteamUserStats.SetAchievement -> on appelle StoreStats() après orig
 				try
 				{
