@@ -8,8 +8,6 @@ namespace SteamFixer
 {
     public class SteamFixerPlayer : ModPlayer
     {
-        private HashSet<string> granted = new HashSet<string>();
-
         public override void OnEnterWorld()
         {
             var count = 0;
@@ -21,13 +19,13 @@ namespace SteamFixer
 
             foreach (var achievement in Main.Achievements.CreateAchievementsList())
             {
-                if (achievement.IsCompleted && !granted.Contains(achievement.Name))
+                if (achievement.IsCompleted)
                 {
                     try
                     {
                         SteamFixer.sendCmdDelegate?.Invoke("grant:" + achievement.Name);
-                        SteamUserStats.StoreStats();
-                        granted.Add(achievement.Name);
+                        SteamFixer.GetInstance().GrantAchievement(achievement.Name);
+                        SteamFixer.GetInstance().TryStoreStats();
                         count++;
                     }
                     catch

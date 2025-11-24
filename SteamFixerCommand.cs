@@ -24,19 +24,17 @@ namespace SteamFixer
             }
             
             int pushed = 0;
-            HashSet<string> pushedSet = new HashSet<string>();
 
             // Parcours tous les achievements tML
             foreach (var achievement in Main.Achievements.CreateAchievementsList())
             {
-                if (achievement.IsCompleted && !pushedSet.Contains(achievement.Name))
+                if (achievement.IsCompleted)
                 {
                     try
                     {
                         // Pousser vers Steam
-                        SteamFixer.sendCmdDelegate?.Invoke("grant:" + achievement.Name);
-                        SteamUserStats.StoreStats();
-                        pushedSet.Add(achievement.Name);
+                        SteamFixer.GetInstance().GrantAchievement(achievement.Name);
+                        SteamFixer.GetInstance().TryStoreStats();
                         pushed++;
                     }
                     catch
