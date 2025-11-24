@@ -3,7 +3,6 @@ using Steamworks;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.Social;
-using SteamFixer;
 
 namespace SteamFixer
 {
@@ -37,7 +36,7 @@ namespace SteamFixer
                     }
                 }
             }
-            Main.NewText("[SteamFixer] " + count + " achievement(s) loaded on Steam.", Microsoft.Xna.Framework.Color.Red);
+            Main.NewText("[SteamFixer] " + count + " achievement(s) loaded on Steam.", Microsoft.Xna.Framework.Color.Green);
         }
     }
 }
