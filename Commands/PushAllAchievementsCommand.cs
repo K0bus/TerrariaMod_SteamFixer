@@ -33,7 +33,6 @@ namespace FixedAchievements.Commands
                 {
                     try
                     {
-                        // Pousser vers Steam
                         FixedAchievements.Instance.GrantAchievement(achievement.Name);
                         FixedAchievements.Instance.TryStoreStats();
 
@@ -41,7 +40,6 @@ namespace FixedAchievements.Commands
                     }
                     catch
                     {
-                        // On ignore les erreurs pour ne pas interrompre la boucle
                         continue;
                     }
                 }
