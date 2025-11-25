@@ -12,7 +12,7 @@ namespace FixedAchievements.Commands
 
         public override string Command => "pushallachievements";
 
-        public override string Description => Language.GetTextValue("Mods.SteamFixer.AchievementCommandDescription");
+        public override string Description => Language.GetTextValue("Mods.SteamFixer.AchievementPushCommandDescription");
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
