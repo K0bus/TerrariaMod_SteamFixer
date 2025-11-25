@@ -28,53 +28,64 @@ namespace FixedAchievements.Commands
                 caller.Reply($"[SteamFixer] {errorReply}", Color.Red);
                 return;
             }
-            
+
             int pushed = 0;
-            
-            var stats = await SteamStatsService.GetPlayerStatsAsync(SteamUser.GetSteamID().ToString());
-            foreach (var ach in stats.Achievements)
+            try
             {
-                if (ach.IsUnlocked)
+                var stats = await SteamStatsService.GetPlayerStatsAsync(SteamUser.GetSteamID().ToString());
+                foreach (var ach in stats.Achievements)
                 {
-                    Achievement gameAchievement = Main.Achievements.GetAchievement(ach.ApiName.ToUpper());
-                    if (gameAchievement != null)
+                    if (ach.IsUnlocked)
                     {
-                        if (!gameAchievement.IsCompleted)
+                        Achievement gameAchievement = Main.Achievements.GetAchievement(ach.ApiName.ToUpper());
+                        if (gameAchievement != null)
                         {
-                            try
+                            if (!gameAchievement.IsCompleted)
                             {
-                                foreach (var conditionName in TerrariaUtils.GetAchievementConditionNames(gameAchievement))
+                                try
                                 {
-                                    var condition = gameAchievement.GetCondition(conditionName);
-                                    if (condition != null)
+                                    foreach (var conditionName in TerrariaUtils.GetAchievementConditionNames(
+                                                 gameAchievement))
                                     {
-                                        condition.Complete();
+                                        var condition = gameAchievement.GetCondition(conditionName);
+                                        if (condition != null)
+                                        {
+                                            condition.Complete();
+                                        }
+                                        else
+                                        {
+                                            Mod.Logger.Warn(
+                                                $"[SteamFixer] Can't complete condition `{conditionName}` for {gameAchievement.Name}");
+                                        }
                                     }
-                                    else
-                                    {
-                                        Mod.Logger.Warn($"[SteamFixer] Can't complete condition `{conditionName}` for {gameAchievement.Name}");
-                                    }
+
+                                    Mod.Logger.Info(
+                                        $"[SteamFixer] Complete achievement : {ach.ApiName} ({ach.DisplayName})");
+                                    pushed++;
                                 }
-                                Mod.Logger.Info($"[SteamFixer] Complete achievement : {ach.ApiName} ({ach.DisplayName})");
-                                pushed++;
-                            }
-                            catch (Exception e)
-                            {
-                                Mod.Logger.Error($"[SteamFixer] {e.Message}");
+                                catch (Exception e)
+                                {
+                                    Mod.Logger.Error($"[SteamFixer] {e.Message}");
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        Mod.Logger.Warn($"[SteamFixer] Can't find achievement : {ach.ApiName} ({ach.DisplayName})");
+                        else
+                        {
+                            Mod.Logger.Warn($"[SteamFixer] Can't find achievement : {ach.ApiName} ({ach.DisplayName})");
+                        }
                     }
                 }
-            }
-            if (pushed > 0)
-                Main.Achievements.Save();
-            string successReply = GetTextValue("Mods.SteamFixer.AchievementsPulled", pushed);
 
-            caller.Reply($"[SteamFixer] {successReply}", Color.Green);
+                if (pushed > 0)
+                    Main.Achievements.Save();
+                string successReply = GetTextValue("Mods.SteamFixer.AchievementsPulled", pushed);
+
+                caller.Reply($"[SteamFixer] {successReply}", Color.Green);
+            }
+            catch (Exception e)
+            {
+                caller.Reply($"[SteamFixer] {e.Message}", Color.Red);
+            }
         }
     }
 }
