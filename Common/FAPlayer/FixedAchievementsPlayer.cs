@@ -26,7 +26,6 @@ namespace FixedAchievements
                 {
                     try
                     {
-                        FixedAchievements.SendCmdDelegate?.Invoke("grant:" + achievement.Name);
                         FixedAchievements.Instance.GrantAchievement(achievement.Name);
                         FixedAchievements.Instance.TryStoreStats();
                         pushed++;
