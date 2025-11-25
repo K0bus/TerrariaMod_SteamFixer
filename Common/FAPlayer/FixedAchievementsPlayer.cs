@@ -4,9 +4,9 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Social;
 
-namespace FixedAchievements
+namespace FixedAchievements.Common.FAPlayer
 {
-    public class SteamFixerPlayer : ModPlayer
+    public class FixedAchievementsPlayer : ModPlayer
     {
         public override void OnEnterWorld()
         {

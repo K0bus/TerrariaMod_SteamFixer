@@ -4,7 +4,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Social;
 
-namespace FixedAchievements
+namespace FixedAchievements.Commands
 {
     public class PushAllAchievementsCommand : ModCommand
     {
