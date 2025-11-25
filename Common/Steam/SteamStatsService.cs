@@ -24,7 +24,7 @@ namespace FixedAchievements.Common.Steam
             }
             catch (Exception ex)
             {
-                throw new Exception($"Impossible de télécharger les stats Steam : {ex.Message}", ex);
+                throw new Exception($"Unable to download Steam stats : {ex.Message}", ex);
             }
 
             XDocument doc;
@@ -35,16 +35,16 @@ namespace FixedAchievements.Common.Steam
             }
             catch (Exception ex)
             {
-                throw new Exception("Format XML Steam invalide", ex);
+                throw new Exception("Steam data could not be read. To use this feature, please set your Steam profile visibility to Public.", ex);
             }
 
             XElement root = doc.Element("playerstats")
-                ?? throw new Exception("Le XML Steam ne contient pas de balise <playerstats>.");
+                ?? throw new Exception("XML data does not contain <playerstats>.");
 
             // Vérifier la confidentialité
             var privacy = root.Element("privacyState")?.Value;
             if (privacy != "public")
-                throw new Exception("Le profil Steam est privé : impossible de lire les achievements.");
+                throw new Exception("The Steam profile is private: unable to read achievements.");
 
             var stats = new SteamPlayerStats
             {
