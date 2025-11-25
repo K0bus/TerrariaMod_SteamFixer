@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Steamworks;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;

@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using MonoMod.RuntimeDetour;
 using Steamworks;
 using Terraria;
 using Terraria.Achievements;
