@@ -1,3 +1,5 @@
 SteamInactive: Steam is inactive or unavailable.
-AchievementCommandDescription: Updates steam with all currently completed achievements.
+AchievementPushCommandDescription: Updates steam with all currently completed achievements.
+AchievementPullCommandDescription: Update Terraria achievements by getting Steam achievement.
 AchievementsPushed: "{0} achievements refreshed!"
+AchievementsPulled: "{0} achievements pulled from steam data!"
