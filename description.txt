@@ -13,3 +13,4 @@ Features:
 Notes:
 - Recommend backing up your save files before use to ensure your progress remains safe.
 - Be patient, Terraria achievements will be loaded on Steam once you close the game.
+- For pulling Steam achievements in your Terraria save, you need to make your profile page public due to some steam limitations.
