@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using MonoMod.RuntimeDetour;
 using Steamworks;
 using Terraria;
 using Terraria.Achievements;
@@ -25,8 +24,8 @@ public class FixedAchievements : Mod
 
         try
         {
-            InitializeCMD();
-            InitializeSocialAPI();
+            InitializeCmd();
+            InitializeSocialApi();
             RegisterAchievementHook();
             TryStoreStats();
         }
@@ -90,7 +89,7 @@ public class FixedAchievements : Mod
         catch (Exception e) { Logger.Warn($"[SteamFixer] StoreStats failed: {e}"); }
     }
 
-    private void InitializeCMD()
+    private void InitializeCmd()
     {
         Assembly assembly = typeof(Main).Assembly;
 
@@ -141,7 +140,7 @@ public class FixedAchievements : Mod
         }
     }
 
-    private void InitializeSocialAPI()
+    private void InitializeSocialApi()
     {
         try
         {

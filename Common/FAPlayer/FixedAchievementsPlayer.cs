@@ -1,14 +1,12 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Steamworks;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Social;
 
-namespace FixedAchievements
+namespace FixedAchievements.Common.FAPlayer
 {
-    public class SteamFixerPlayer : ModPlayer
+    public class FixedAchievementsPlayer : ModPlayer
     {
         public override void OnEnterWorld()
         {
@@ -28,7 +26,6 @@ namespace FixedAchievements
                 {
                     try
                     {
-                        FixedAchievements.SendCmdDelegate?.Invoke("grant:" + achievement.Name);
                         FixedAchievements.Instance.GrantAchievement(achievement.Name);
                         FixedAchievements.Instance.TryStoreStats();
                         pushed++;

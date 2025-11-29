@@ -1,12 +1,10 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Steamworks;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Social;
 
-namespace FixedAchievements
+namespace FixedAchievements.Commands
 {
     public class PushAllAchievementsCommand : ModCommand
     {
@@ -14,7 +12,7 @@ namespace FixedAchievements
 
         public override string Command => "pushallachievements";
 
-        public override string Description => Language.GetTextValue("Mods.SteamFixer.AchievementCommandDescription");
+        public override string Description => Language.GetTextValue("Mods.SteamFixer.AchievementPushCommandDescription");
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
@@ -35,7 +33,6 @@ namespace FixedAchievements
                 {
                     try
                     {
-                        // Pousser vers Steam
                         FixedAchievements.Instance.GrantAchievement(achievement.Name);
                         FixedAchievements.Instance.TryStoreStats();
 
@@ -43,7 +40,6 @@ namespace FixedAchievements
                     }
                     catch
                     {
-                        // On ignore les erreurs pour ne pas interrompre la boucle
                         continue;
                     }
                 }
