@@ -2,10 +2,10 @@ Tired of losing your hard-earned tModLoader achievements when switching back to 
 
 [h3]Features:[/h3]
 
-- Automatically grants all completed achievements in tModLoader to Terraria when loading a world, or on recieving the achievement.
+- Automatically grants all completed achievements in tModLoader to Terraria when loading a world, or on recieving the achievement. (Can be configured to be disabled)
 - Maintains your progress across both Terraria on Steam and tModLoader ingame.
-- Adds a command that refreshes achievement progress, in case they don't register (/pushallachievements).
-- Adds a command that pull achievement progress from the public steam profile page, and complete all uncompleted game achievements (/pullsteamachievements).
+- Adds a command that refreshes achievement progress, in case they don't register (/saf push).
+- Adds a command that pull achievement progress from the public steam profile page, and complete all uncompleted game achievements (/saf pull).
 
 [h3]Notes:[/h3]
 
