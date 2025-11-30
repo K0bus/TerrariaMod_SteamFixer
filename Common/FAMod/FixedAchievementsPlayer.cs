@@ -1,3 +1,4 @@
+using FixedAchievements.Common.Config;
 using FixedAchievements.Common.Service;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -11,6 +12,9 @@ namespace FixedAchievements.Common.FAMod
     {
         public override void OnEnterWorld()
         {
+            if(!ModContent.GetInstance<FixedAchievementsConfig>().EnableAutoSync)
+                return;
+            
             var pushed = AchievementService.PushAllSteamAchievements();
             
             string successReply = Language.GetTextValue("Mods.SteamFixer.AchievementsPushed", pushed);

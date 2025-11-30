@@ -3,3 +3,13 @@ AchievementPushCommandDescription: Updates steam with all currently completed ac
 AchievementPullCommandDescription: Update Terraria achievements by getting Steam achievement.
 AchievementsPushed: "{0} achievements refreshed!"
 AchievementsPulled: "{0} achievements pulled from steam data!"
+
+Config: {
+	EnableAutoSync: Enable Auto Sync on World Enter
+	DebugLogs: Enable Debug Logging
+	ActionsHeader: Executable function
+	PushAchievementsAction: Push All Achievements
+	PullAchievementsAction: Pull All Achievements
+	PushAchievementsTooltip: Send game achievements to steam
+	PullAchievementsTooltip: Get steam achievements to game
+}
