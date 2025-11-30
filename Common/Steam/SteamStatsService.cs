@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -77,7 +78,7 @@ namespace FixedAchievements.Common.Steam
 
         // Helpers parsing
         private static float? ParseFloat(string s)
-            => float.TryParse(s, System.Globalization.CultureInfo.InvariantCulture, out var v) ? v : null;
+            => float.TryParse(s, CultureInfo.CurrentCulture, out var v) ? v : null;
 
         private static long? ParseLong(string s)
             => long.TryParse(s, out var v) ? v : null;
