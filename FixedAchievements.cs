@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using FixedAchievements.Common.Service;
+using FixedAchievements.Common.Wrapper;
 using log4net;
 using Steamworks;
 using Terraria;
@@ -35,7 +36,7 @@ public class FixedAchievements : Mod
         catch (Exception e)
         {
             // Défense en profondeur : ne pas planter le chargement du mod si qqchose casse
-            Logger.Error($"[SteamFixer] Load() error: {e}");
+            Log.Error($"[SteamFixer] Load() error: {e}");
         }
     }
 
@@ -48,7 +49,7 @@ public class FixedAchievements : Mod
         }
         catch (Exception e)
         {
-            Logger.Warn($"[SteamFixer] AchievementCompletedHandler Exception: {e}");
+            Log.Warn($"[SteamFixer] AchievementCompletedHandler Exception: {e}");
         }
     }
 
@@ -66,14 +67,14 @@ public class FixedAchievements : Mod
         }
         catch (Exception e)
         {
-            Logger.Warn($"[SteamFixer] Unload() Exception: {e}");
+            Log.Warn($"[SteamFixer] Unload() Exception: {e}");
         }
     }
 
     public void TryStoreStats()
     {
         try { SteamUserStats.StoreStats(); }
-        catch (Exception e) { Logger.Warn($"[SteamFixer] StoreStats failed: {e}"); }
+        catch (Exception e) { Log.Warn($"[SteamFixer] StoreStats failed: {e}"); }
     }
 
     private void InitializeCmd()
@@ -119,7 +120,7 @@ public class FixedAchievements : Mod
 
         if (sendCmdMethod == null)
         {
-            Logger.Warn("[SteamFixer] SendCmd method not found via reflection. Steam grant path disabled.");
+            Log.Warn("[SteamFixer] SendCmd method not found via reflection. Steam grant path disabled.");
         }
         else
         {
@@ -139,7 +140,7 @@ public class FixedAchievements : Mod
         }
         catch (Exception e)
         {
-            Logger.Warn($"[SteamFixer] SocialAPI.Initialize threw: {e}");
+            Log.Warn($"[SteamFixer] SocialAPI.Initialize threw: {e}");
         }
     }
 
@@ -153,12 +154,12 @@ public class FixedAchievements : Mod
             }
             else
             {
-                Logger.Warn("SteamFixer: Main.Achievements is null — cannot hook achievements");
+                Log.Warn("SteamFixer: Main.Achievements is null — cannot hook achievements");
             }
         }
         catch (Exception e)
         {
-            Logger.Warn($"SteamFixer: failed to hook OnAchievementCompleted: {e}");
+            Log.Warn($"SteamFixer: failed to hook OnAchievementCompleted: {e}");
         }
     }
 }

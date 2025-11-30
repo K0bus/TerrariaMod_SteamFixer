@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FixedAchievements.Common.Steam;
 using FixedAchievements.Common.Terraria;
+using FixedAchievements.Common.Wrapper;
 using Microsoft.Xna.Framework;
 using Steamworks;
 using Terraria;
@@ -47,24 +48,24 @@ public abstract class AchievementService
                                     }
                                     else
                                     {
-                                        FixedAchievements.LoggerInstance.Warn(
+                                        Log.Warn(
                                             $"[SteamFixer] Can't complete condition `{conditionName}` for {gameAchievement.Name}");
                                     }
                                 }
 
-                                FixedAchievements.LoggerInstance.Info(
+                                Log.Info(
                                     $"[SteamFixer] Complete achievement : {ach.ApiName} ({ach.DisplayName})");
                                 pushed++;
                             }
                             catch (Exception e)
                             {
-                                FixedAchievements.LoggerInstance.Error($"[SteamFixer] {e.Message}");
+                                Log.Error($"[SteamFixer] {e.Message}");
                             }
                         }
                     }
                     else
                     {
-                        FixedAchievements.LoggerInstance.Warn($"[SteamFixer] Can't find achievement : {ach.ApiName} ({ach.DisplayName})");
+                        Log.Warn($"[SteamFixer] Can't find achievement : {ach.ApiName} ({ach.DisplayName})");
                     }
                 }
             }
@@ -123,8 +124,7 @@ public abstract class AchievementService
             }
             catch (Exception e)
             {
-                FixedAchievements.LoggerInstance.Warn(
-                    $"[SteamFixer] SendCmdDelegate failed for {achievementsName}: {e}");
+                Log.Warn($"[SteamFixer] SendCmdDelegate failed for {achievementsName}: {e}");
             }
         }
     }
