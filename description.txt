@@ -7,8 +7,8 @@ Version 1.4: Thanks entirely to K0bus, the mod should now keep track of achievem
 Features:
 - Automatically grants all completed achievements in tModLoader to Terraria when loading a world, or on recieving the achievement.
 - Maintains your progress across both Terraria on Steam and tModLoader ingame.
-- Adds a command that refreshes achievement progress, in case they don't register (/pushallachievements).
-- Adds a command that pull achievement progress from the public steam profile page, and complete all uncompleted game achievements (/pullsteamachievements).
+- Adds a command that refreshes achievement progress, in case they don't register (/saf push).
+- Adds a command that pull achievement progress from the public steam profile page, and complete all uncompleted game achievements (/saf pull).
 
 Notes:
 - Recommend backing up your save files before use to ensure your progress remains safe.
