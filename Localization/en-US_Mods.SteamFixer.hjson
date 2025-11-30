@@ -5,7 +5,7 @@ AchievementsPushed: "{0} achievements refreshed!"
 AchievementsPulled: "{0} achievements pulled from steam data!"
 
 Config: {
-	DisplayName: Steam Achievement Fix
+	DisplayName: Global configuration
 	EnableAutoSync: Enable Auto Sync on World Enter
 	EnableAutoSyncTooltip: Send all you achievements to Steam on world enter
 }
