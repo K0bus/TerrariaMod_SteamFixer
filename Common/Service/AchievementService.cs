@@ -115,12 +115,12 @@ public abstract class AchievementService
 
     public static void PushSteamAchievement(string achievementsName)
     {
-        if (FixedAchievements.SendCmdDelegate != null && !FixedAchievements.granted.Contains(achievementsName))
+        if (FixedAchievements.SendCmdDelegate != null && !FixedAchievements.Granted.Contains(achievementsName))
         {
             try
             {
                 FixedAchievements.SendCmdDelegate.Invoke("grant:" + achievementsName);
-                FixedAchievements.granted.Add(achievementsName);
+                FixedAchievements.Granted.Add(achievementsName);
             }
             catch (Exception e)
             {
