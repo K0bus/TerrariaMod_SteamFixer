@@ -1,3 +1,4 @@
+using FixedAchievements.Common.Service;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Localization;
@@ -16,37 +17,9 @@ namespace FixedAchievements.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            if (SocialAPI.Mode != SocialMode.Steam)
-            {
-                string errorReply = Language.GetTextValue("Mods.SteamFixer.SteamInactive");
+            var pushed = AchievementService.PushAllSteamAchievements();
 
-                caller.Reply($"[SteamFixer] {errorReply}", Color.Red);
-                return;
-            }
-            
-            int pushed = 0;
-
-            // Parcours tous les achievements tML
-            foreach (var achievement in Main.Achievements.CreateAchievementsList())
-            {
-                if (achievement.IsCompleted)
-                {
-                    try
-                    {
-                        FixedAchievements.Instance.GrantAchievement(achievement.Name);
-                        FixedAchievements.Instance.TryStoreStats();
-
-                        pushed++;
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-                }
-            }
-
-            string successReply = Language.GetTextValue("Mods.SteamFixer.AchievementsPushed", pushed);
-
+            var successReply = Language.GetTextValue("Mods.SteamFixer.AchievementsPushed", pushed);
             caller.Reply($"[SteamFixer] {successReply}", Color.Green);
         }
     }

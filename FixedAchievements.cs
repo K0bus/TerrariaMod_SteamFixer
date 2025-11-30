@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using FixedAchievements.Common.Service;
+using log4net;
 using Steamworks;
 using Terraria;
 using Terraria.Achievements;
@@ -15,13 +17,14 @@ public class FixedAchievements : Mod
     public static FixedAchievements Instance { get; private set; }
 
     public static Action<string> SendCmdDelegate;
-
-    private readonly HashSet<string> granted = [];
+    internal static ILog LoggerInstance;
+    
+    public static HashSet<string> granted = [];
 
     public override void Load()
     {
         Instance = this;
-
+        LoggerInstance = Logger;
         try
         {
             InitializeCmd();
@@ -40,7 +43,7 @@ public class FixedAchievements : Mod
     {
         try
         {
-            GrantAchievement(achievement.Name);   
+            AchievementService.PushSteamAchievement(achievement.Name);   
             TryStoreStats();
         }
         catch (Exception e)
@@ -66,22 +69,6 @@ public class FixedAchievements : Mod
             Logger.Warn($"[SteamFixer] Unload() Exception: {e}");
         }
     }
-
-	public void GrantAchievement(string name)
-	{
-		if(SendCmdDelegate != null && !granted.Contains(name))
-        {
-            try
-            {
-                SendCmdDelegate.Invoke("grant:" + name);
-                granted.Add(name);
-            }
-            catch (Exception e)
-            {
-                Logger.Warn($"[SteamFixer] SendCmdDelegate failed for {name}: {e}");
-            }
-        }
-	}
 
     public void TryStoreStats()
     {
