@@ -20,7 +20,7 @@ public class FixedAchievements : Mod
     public static Action<string> SendCmdDelegate;
     internal static ILog LoggerInstance;
     
-    public static HashSet<string> granted = [];
+    public static readonly HashSet<string> Granted = [];
 
     public override void Load()
     {
